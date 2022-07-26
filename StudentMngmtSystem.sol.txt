@@ -1,0 +1,86 @@
+pragma solidity >=0.4.0 <0.9.0;
+
+contract ScoreCard {
+    uint256 studentCount = 0; //to count the number of students inintializing it with 0
+    //Initialize the address of the owner of SC here clas teacher
+    address public classTeacher;
+
+    constructor() {
+        classTeacher = msg.sender; //refers to the smart contract who called the current function, here its the constructor
+    }
+
+    //Adding modifier to make sure only class teacher is able to access the functions
+    modifier onlyClassTeacher(address _classTeacher) {
+        require(
+            classTeacher == _classTeacher,
+            "Only the class teacher has access to this function"
+        );
+        _;
+    }
+
+    //Define the details of all the students
+    struct StudentDetails {
+        string studentFirstName;
+        string studentLastName;
+        uint256 id;
+    }
+
+    //Defining the score of all students
+    struct Score {
+        uint256 studentId;
+        uint256 englishMarks;
+        uint256 mathMarks;
+        uint256 scienceMarks;
+    }
+
+    //Declare mappings to hold the data of students for a given student address
+    mapping(uint256 => StudentDetails) students;
+    mapping(uint256 => Score) scores;
+
+    //Adding events
+    event studentAdded(
+        string _studentFirstName,
+        string _studentLastName,
+        uint256 _studentId
+    );
+    event studentScoreRecorded(
+        uint256 _studentId,
+        uint256 _englishMarks,
+        uint256 _mathMarks,
+        uint256 _scienceMarks
+    );
+
+    //Creating a function which enables class teacher to add student details onto our SC
+    function addStudentDetails(
+        string memory _studentFirstName,
+        string memory _studentLastName
+    ) public onlyClassTeacher(msg.sender) {
+        StudentDetails storage studentObj = students[studentCount];
+
+        studentObj.studentFirstName = _studentFirstName;
+        studentObj.studentLastName = _studentLastName;
+        studentObj.id = studentCount;
+        emit studentAdded(_studentFirstName, _studentLastName, studentCount);
+        studentCount++;
+    }
+
+    function addStudentScores(
+        uint256 _studentId,
+        uint256 _englishMarks,
+        uint256 _mathMarks,
+        uint256 _scienceMarks
+    ) public onlyClassTeacher(msg.sender) {
+        Score storage scoreObject = scores[_studentId];
+
+        scoreObject.englishMarks = _englishMarks;
+        scoreObject.mathMarks = _mathMarks;
+        scoreObject.scienceMarks = _scienceMarks;
+        scoreObject.studentId = _studentId;
+        emit studentScoreRecorded(
+            _studentId,
+            _englishMarks,
+            _mathMarks,
+            _scienceMarks
+        );
+    }
+}
