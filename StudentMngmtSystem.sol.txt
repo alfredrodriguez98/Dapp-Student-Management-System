@@ -1,8 +1,8 @@
 pragma solidity >=0.4.0 <0.9.0;
 
 contract ScoreCard {
-    uint256 studentCount = 0; //to count the number of students inintializing it with 0
-    //Initialize the address of the owner of SC here clas teacher
+    uint256 studentCount = 0; //inintializing count to 0
+    //Initialize the address of the owner of Smart Contract here it's class teacher
     address public classTeacher;
 
     constructor() {
