@@ -1,12 +1,12 @@
+// SPDX-License-Identifier: MIT
 pragma solidity >=0.4.0 <0.9.0;
 
 contract ScoreCard {
-    uint256 studentCount = 0; //inintializing count to 0
-    //Initialize the address of the owner of Smart Contract here it's class teacher
+    uint256 studentCount = 0;
     address public classTeacher;
 
     constructor() {
-        classTeacher = msg.sender; //refers to the smart contract who called the current function, here its the constructor
+        classTeacher = msg.sender;                          //refers to the smart contract who called the current function, here its the constructor
     }
 
     //Adding modifier to make sure only class teacher is able to access the functions
@@ -18,7 +18,7 @@ contract ScoreCard {
         _;
     }
 
-    //Define the details of all the students
+    //A data structure to store basic details of all the students
     struct StudentDetails {
         string studentFirstName;
         string studentLastName;
@@ -50,7 +50,8 @@ contract ScoreCard {
         uint256 _scienceMarks
     );
 
-    //Creating a function which enables class teacher to add student details onto our SC
+    //Creating a function which enables class only teacher to add student details onto our contract
+    
     function addStudentDetails(
         string memory _studentFirstName,
         string memory _studentLastName
@@ -64,6 +65,7 @@ contract ScoreCard {
         studentCount++;
     }
 
+ //Creating a function which enables class only teacher to add student scores onto our contract
     function addStudentScores(
         uint256 _studentId,
         uint256 _englishMarks,
